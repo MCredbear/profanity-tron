@@ -496,26 +496,30 @@ __kernel void profanity_score_matching(
 		uint scoreSuffix = 0;
 		uint dataIndex = 0;
 		if(prefixCount > 1) {
+            uint countUnmatched = 0;
 			for (uint i = 1; i < 10; ++i) {
 				dataIndex = j * 20 + i;
 				if (data1[dataIndex] > 0 && (matchingHash[i] & data1[dataIndex]) == data2[dataIndex]) {
 					++scorePrefix;
 				} else {
-					break;
+					countUnmatched += 1;
+                    if (countUnmatched == 2) break;
 				}
 			}
 		}
 		if(suffixCount > 0) {
+            uint countUnmatched = 0;
 			for (uint i = 19; i > 10; --i) {
 				dataIndex = j * 20 + i;
 				if (data1[dataIndex] > 0 && (matchingHash[i] & data1[dataIndex]) == data2[dataIndex]) {
 					++scoreSuffix;
 				} else {
-					break;
+					countUnmatched += 1;
+                    if (countUnmatched == 2) break;
 				}
 			}
 		}
-		if(scorePrefix >= prefixCount && scoreSuffix >= suffixCount){
+		if(scorePrefix >= prefixCount - 1 && scoreSuffix >= suffixCount - 1){
 			profanity_result_update(id, hash, pResult, scoreMax);
 			break;
 		}
