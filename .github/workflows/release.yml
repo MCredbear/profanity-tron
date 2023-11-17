@@ -34,7 +34,6 @@ jobs:
       - uses: ncipollo/release-action@v1
         with:
           artifacts: "${{ github.workspace }}/dist/windows.zip"
-          token: ${{ secrets.GH_TOKEN }}
           tag: v4.0.0
           draft: true
           allowUpdates: true
